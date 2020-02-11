@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app  = express();
 
-// app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
 
@@ -13,6 +13,7 @@ const database = {
         {
             id: '123',
             name: 'John',
+            password: 'cookies',
             email: 'john@gmail.com',
             entries: 0,
             joined: new Date()
@@ -20,6 +21,7 @@ const database = {
         {
             id: '124',
             name: 'Sally',
+            password: 'bananas',
             email: 'sally@gmail.com',
             entries: 0,
             joined: new Date()
@@ -38,17 +40,13 @@ app.get('/', (req, res) => {
     res.send(database.users);
 });
 
-app.post('/signin', (req, res) => {
-    bcrypt.compare("cookies", '$2a$10$jr3sMndpOpPpgGqS5KC8T.HOSmKSbmMAZrToKxBR6BN/musFL6Os6', function(err, res) {
-        console.log('first guess', res)
-    });
+app.post('/signin', (req, res) => {    
     if(req.body.email === database.users[0].email &&
         req.body.password === database.users[0].password) {
             res.json('success');
     } else {
         res.status(400).json('error login in')
     }
-    res.json('signin');
 });
 
 app.post('/register', (req, res) => {
